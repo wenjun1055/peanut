@@ -9,7 +9,7 @@ l*
 Make*
 m*
 modules/*
-peanut_blog.l*
+peanut.l*
 *.txt
 *.ini
 .deps
