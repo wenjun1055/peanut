@@ -1,8 +1,0 @@
-peanut.lo: /home/vagrant/php-5.3.10/ext/peanut/peanut.c
-	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/vagrant/php-5.3.10/ext/peanut $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/vagrant/php-5.3.10/ext/peanut/peanut.c -o peanut.lo 
-$(phplibdir)/peanut.la: ./peanut.la
-	$(LIBTOOL) --mode=install cp ./peanut.la $(phplibdir)
-
-./peanut.la: $(shared_objects_peanut) $(PEANUT_SHARED_DEPENDENCIES)
-	$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_peanut) $(PEANUT_SHARED_LIBADD)
-
