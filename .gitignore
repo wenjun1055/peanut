@@ -2,13 +2,7 @@
 tests/*
 a*
 build/*
-config.h*
-config.guess
-config.log
-config.nice
-config.status
-config.sub
-configure.in
+config*
 include/*
 in*
 l*
