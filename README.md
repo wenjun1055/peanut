@@ -11,11 +11,11 @@
 	<tr>
 		<td>2012-11-7</td>
 		<td>peanut_multiple_array</td>
-		<td>[http://wenjun.in/?p=516](http://wenjun.in/?p=516)</td>
+		<td>[http://wenjun.in/?p=516]</td>
 	</tr>
 	<tr>
 		<td>2012-12-3</td>
 		<td>peanut_get_number_from_string</td>
-		<td>[http://wenjun.in/?p=529](http://wenjun.in/?p=529)</td>
+		<td>[http://wenjun.in/?p=529]</td>
 	</tr>	
 </table>
