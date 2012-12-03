@@ -15,3 +15,17 @@ peanut.l*
 .deps
 .libs/*
 run-tests.php
+
+*.so
+
+*.o
+
+*.o
+
+.libs/peanut.so
+
+*.so
+
+*.lo
+
+*.swp

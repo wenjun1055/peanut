@@ -11,6 +11,15 @@
 	<tr>
 		<td>2012-11-7</td>
 		<td>peanut_multiple_array</td>
-		<td>http://wenjun.in/?p=516</td>
+		<td>[http://wenjun.in/?p=516][1]</td>
 	</tr>
+	<tr>
+		<td>2012-12-3</td>
+		<td>peanut_get_number_from_string</td>
+		<td>[http://wenjun.in/?p=529][2]</td>
+	</tr>
+	
+	
 </table>
+[1]:http://wenjun.in/?p=516
+[2]:http://wenjun.in/?p=529

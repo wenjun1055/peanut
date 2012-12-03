@@ -39,8 +39,9 @@ static int le_peanut;
  * Every user visible function must have an entry in peanut_functions[].
  */
 const zend_function_entry peanut_functions[] = {
-	PHP_FE(peanut_multiple_array,	NULL)		/* For testing, remove later. */
-	PHP_FE_END	/* Must be the last line in peanut_functions[] */
+  PHP_FE(peanut_multiple_array, NULL)   /* For testing, remove later. */
+  PHP_FE(peanut_get_number_from_string, NULL)
+  PHP_FE_END  /* Must be the last line in peanut_functions[] */
 };
 /* }}} */
 
@@ -48,19 +49,19 @@ const zend_function_entry peanut_functions[] = {
  */
 zend_module_entry peanut_module_entry = {
 #if ZEND_MODULE_API_NO >= 20010901
-	STANDARD_MODULE_HEADER,
+  STANDARD_MODULE_HEADER,
 #endif
-	"peanut",
-	peanut_functions,
-	PHP_MINIT(peanut),
-	PHP_MSHUTDOWN(peanut),
-	PHP_RINIT(peanut),		/* Replace with NULL if there's nothing to do at request start */
-	PHP_RSHUTDOWN(peanut),	/* Replace with NULL if there's nothing to do at request end */
-	PHP_MINFO(peanut),
+  "peanut",
+  peanut_functions,
+  PHP_MINIT(peanut),
+  PHP_MSHUTDOWN(peanut),
+  PHP_RINIT(peanut),    /* Replace with NULL if there's nothing to do at request start */
+  PHP_RSHUTDOWN(peanut),  /* Replace with NULL if there's nothing to do at request end */
+  PHP_MINFO(peanut),
 #if ZEND_MODULE_API_NO >= 20010901
-	"0.1", /* Replace with version number for your extension */
+  "0.1", /* Replace with version number for your extension */
 #endif
-	STANDARD_MODULE_PROPERTIES
+  STANDARD_MODULE_PROPERTIES
 };
 /* }}} */
 
@@ -83,8 +84,8 @@ PHP_INI_END()
 /* Uncomment this function if you have INI entries
 static void php_peanut_init_globals(zend_peanut_globals *peanut_globals)
 {
-	peanut_globals->global_value = 0;
-	peanut_globals->global_string = NULL;
+  peanut_globals->global_value = 0;
+  peanut_globals->global_string = NULL;
 }
 */
 /* }}} */
@@ -93,10 +94,10 @@ static void php_peanut_init_globals(zend_peanut_globals *peanut_globals)
  */
 PHP_MINIT_FUNCTION(peanut)
 {
-	/* If you have INI entries, uncomment these lines 
-	REGISTER_INI_ENTRIES();
-	*/
-	return SUCCESS;
+  /* If you have INI entries, uncomment these lines 
+  REGISTER_INI_ENTRIES();
+  */
+  return SUCCESS;
 }
 /* }}} */
 
@@ -104,10 +105,10 @@ PHP_MINIT_FUNCTION(peanut)
  */
 PHP_MSHUTDOWN_FUNCTION(peanut)
 {
-	/* uncomment this line if you have INI entries
-	UNREGISTER_INI_ENTRIES();
-	*/
-	return SUCCESS;
+  /* uncomment this line if you have INI entries
+  UNREGISTER_INI_ENTRIES();
+  */
+  return SUCCESS;
 }
 /* }}} */
 
@@ -116,7 +117,7 @@ PHP_MSHUTDOWN_FUNCTION(peanut)
  */
 PHP_RINIT_FUNCTION(peanut)
 {
-	return SUCCESS;
+  return SUCCESS;
 }
 /* }}} */
 
@@ -125,7 +126,7 @@ PHP_RINIT_FUNCTION(peanut)
  */
 PHP_RSHUTDOWN_FUNCTION(peanut)
 {
-	return SUCCESS;
+  return SUCCESS;
 }
 /* }}} */
 
@@ -133,16 +134,16 @@ PHP_RSHUTDOWN_FUNCTION(peanut)
  */
 PHP_MINFO_FUNCTION(peanut)
 {
-	php_info_print_table_start();
-	php_info_print_table_header(2, "Name", "SB结构数据");
-  	php_info_print_table_row(2, "Desc", "解决工作中遇到的一些SB结构的数据");
-  	php_info_print_table_row(2, "Author", "花生");
-  	php_info_print_table_row(2, "Email", "wenjun1055@gmail.com");
-  	php_info_print_table_end();
+  php_info_print_table_start();
+  php_info_print_table_header(2, "Name", "SB结构数据");
+    php_info_print_table_row(2, "Desc", "解决工作中遇到的一些SB结构的数据");
+    php_info_print_table_row(2, "Author", "花生");
+    php_info_print_table_row(2, "Email", "wenjun1055@gmail.com");
+    php_info_print_table_end();
 
-	/* Remove comments if you have entries in php.ini
-	DISPLAY_INI_ENTRIES();
-	*/
+  /* Remove comments if you have entries in php.ini
+  DISPLAY_INI_ENTRIES();
+  */
 }
 /* }}} */
 
@@ -180,15 +181,19 @@ PHP_FUNCTION(peanut_multiple_array)
     zend_hash_internal_pointer_reset_ex(temp_hash, &temp_pointer);
     while (zend_hash_get_current_data_ex(temp_hash, (void**)&temp_data, &temp_pointer) == SUCCESS)
     {
+    //  zval_add_ref(temp_data);
+    //  printf("%d\n", (**temp_data).refcount__gc);
+    //  *temp_data = 111;
       //初始化temp
-      MAKE_STD_ZVAL(temp);
-      *temp = **temp_data;
+       MAKE_STD_ZVAL(temp);
+       *temp = **temp_data;
       //copytemp
       zval_copy_ctor(temp);
 
       zend_hash_move_forward_ex(temp_hash, &temp_pointer);
       //将temp所指向的值传入return_value数组中
-      add_next_index_zval(return_value, temp);
+     add_next_index_zval(return_value, temp);
+ //     add_next_index_zval(return_value,*temp_data);
     }
   }
 }
@@ -198,6 +203,43 @@ PHP_FUNCTION(peanut_multiple_array)
    function definition, where the functions purpose is also documented. Please 
    follow this convention for the convenience of others editing your code.
 */
+
+/* {{{ */
+/* 从一个字符串中找出里面的数字,并以数组的形式返回
+ * 字符串：asdas123dasdasd1sadasd96
+ * 应该找出的数字：123 1 96
+ */
+PHP_FUNCTION(peanut_get_number_from_string)
+{
+    char *string;
+    uint string_len;
+    int flag = 0, i = 0;
+    double value = 0;
+    array_init(return_value);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &string, &string_len) == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    for (i = string_len; i > 0; i--)
+    {
+        if (string[i] > 47 && string[i] <58)
+        {
+            value += pow10(flag) * ((int)string[i] - 48);
+            flag++;
+        } else {
+            if (value > 0)
+            {
+                add_next_index_long(return_value, value);
+                value = 0;
+            }
+            flag = 0;
+        }
+    }
+}
+/* }}} */
+
 
 
 /*

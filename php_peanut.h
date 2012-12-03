@@ -42,7 +42,11 @@ PHP_RINIT_FUNCTION(peanut);
 PHP_RSHUTDOWN_FUNCTION(peanut);
 PHP_MINFO_FUNCTION(peanut);
 
-PHP_FUNCTION(peanut_multiple_array);	/* For testing, remove later. */
+/* 将一个二维数组变成一维数组  */
+PHP_FUNCTION(peanut_multiple_array);
+
+/* 从一个字符串中找出所有的数字 */
+PHP_FUNCTION(peanut_get_number_from_string);
 
 /* 
   	Declare any global variables you may need between the BEGIN
