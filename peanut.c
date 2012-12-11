@@ -41,6 +41,7 @@ static int le_peanut;
 const zend_function_entry peanut_functions[] = {
   PHP_FE(peanut_multiple_array, NULL)   /* For testing, remove later. */
   PHP_FE(peanut_get_number_from_string, NULL)
+  PHP_FE(peanut_multiple_array_search, NULL)
   PHP_FE_END  /* Must be the last line in peanut_functions[] */
 };
 /* }}} */
@@ -241,6 +242,72 @@ PHP_FUNCTION(peanut_get_number_from_string)
 /* }}} */
 
 
+/* {{{ */
+/*
+ * PHP自带了一个array_search方法，但是它只能用来搜索一维数组
+ * 要想搜索二维数组的话必须自己修改，所以在这里实现出来
+ */
+PHP_FUNCTION(peanut_multiple_array_search)
+{
+    zval res, *haystack, *needle, **data, **temp;
+    zend_bool strict = 0;
+    HashTable *arr_hash, *entry_hash;
+    HashPointer pointer, entry_pointer;
+    array_init(return_value);
+    char *string_key;
+    int string_key_len;
+    ulong num_key;
+    int (*is_equal_func)(zval *, zval *, zval * TSRMLS_DC) = is_equal_function;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "za|b", &needle, &haystack, &strict) == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    //是否完全匹配
+    if (strict)
+    {
+        is_equal_func = is_identical_function;
+    }
+
+    arr_hash = Z_ARRVAL_P(haystack);
+    zend_hash_internal_pointer_reset_ex(arr_hash, &pointer);
+
+    while (zend_hash_get_current_data_ex(arr_hash, (void**)&data, &pointer) == SUCCESS)
+    {
+        zval_add_ref(data);
+        if (Z_TYPE_PP(data) == IS_ARRAY)
+        {
+            entry_hash = Z_ARRVAL_P(*data);
+            zend_hash_internal_pointer_reset_ex(entry_hash, &entry_pointer);
+            while (zend_hash_get_current_data_ex(entry_hash, (void**)&temp, &entry_pointer) == SUCCESS)
+            {
+                zval_add_ref(temp);
+                is_equal_func(&res, needle, *temp TSRMLS_CC);
+                if (Z_LVAL(res))
+                {
+                    switch (zend_hash_get_current_key_ex(entry_hash, &string_key, &string_key_len, &num_key, 0, &pointer ))
+                    {
+                        case HASH_KEY_IS_LONG:
+                            add_next_index_long(return_value, num_key);
+                            break;
+                        case HASH_KEY_IS_STRING:
+                            add_next_index_stringl(return_value, string_key, string_key_len - 1, 1);
+                            break;
+                    }
+                }
+                zend_hash_move_forward_ex(entry_hash, &entry_pointer);
+            }
+        } else
+        {
+            php_error_docref(NULL TSRMLS_CC, E_WARNING, "Array is not a multiple array!\r\n");
+            RETURN_FALSE;
+        }
+        zend_hash_move_forward_ex(arr_hash, &pointer);
+    }
+}
+
+/* }}} */
 
 /*
  * Local variables:

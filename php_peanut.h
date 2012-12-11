@@ -48,6 +48,11 @@ PHP_FUNCTION(peanut_multiple_array);
 /* 从一个字符串中找出所有的数字 */
 PHP_FUNCTION(peanut_get_number_from_string);
 
+/* 从一个二维数组中找出要搜寻的值，并返回所在的key */
+PHP_FUNCTION(peanut_multiple_array_search);
+
+
+
 /* 
   	Declare any global variables you may need between the BEGIN
 	and END macros here:     

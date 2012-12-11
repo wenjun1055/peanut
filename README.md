@@ -18,4 +18,9 @@
 		<td>peanut_get_number_from_string</td>
 		<td>[http://wenjun.in/?p=529]</td>
 	</tr>	
+	<tr>
+		<td>2012-12-11</td>
+		<td>peanut_multiple_array_search</td>
+		<td>[http://wenjun.in/?p=555]</td>
+	</tr>
 </table>
