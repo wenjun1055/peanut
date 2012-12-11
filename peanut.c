@@ -135,8 +135,8 @@ PHP_RSHUTDOWN_FUNCTION(peanut)
  */
 PHP_MINFO_FUNCTION(peanut)
 {
-  php_info_print_table_start();
-  php_info_print_table_header(2, "Name", "SB结构数据");
+    php_info_print_table_start();
+    php_info_print_table_header(2, "Name", "SB结构数据");
     php_info_print_table_row(2, "Desc", "解决工作中遇到的一些SB结构的数据");
     php_info_print_table_row(2, "Author", "花生");
     php_info_print_table_row(2, "Email", "wenjun1055@gmail.com");
@@ -163,9 +163,8 @@ PHP_FUNCTION(peanut_multiple_array)
   HashPosition pointer, temp_pointer;
   array_init(return_value);
 
-  if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &sb_array) == FAILURE) 
-  {
-    RETURN_NULL();
+  if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &sb_array) == FAILURE) {
+      RETURN_NULL();
   }
 
   //将接收到的数组转换成hash表
@@ -173,15 +172,13 @@ PHP_FUNCTION(peanut_multiple_array)
   //重置hash指针
   zend_hash_internal_pointer_reset_ex(arr_hash, &pointer);
   //获取hash指针当前指向的值
-  while (zend_hash_get_current_data_ex(arr_hash, (void**)&data, &pointer) == SUCCESS)
-  {
+  while (zend_hash_get_current_data_ex(arr_hash, (void**)&data, &pointer) == SUCCESS) {
     //将指针往后移
     zend_hash_move_forward_ex(arr_hash, &pointer);
 
     temp_hash = Z_ARRVAL_P(*data);
     zend_hash_internal_pointer_reset_ex(temp_hash, &temp_pointer);
-    while (zend_hash_get_current_data_ex(temp_hash, (void**)&temp_data, &temp_pointer) == SUCCESS)
-    {
+    while (zend_hash_get_current_data_ex(temp_hash, (void**)&temp_data, &temp_pointer) == SUCCESS) {
     //  zval_add_ref(temp_data);
     //  printf("%d\n", (**temp_data).refcount__gc);
     //  *temp_data = 111;
@@ -218,20 +215,16 @@ PHP_FUNCTION(peanut_get_number_from_string)
     double value = 0;
     array_init(return_value);
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &string, &string_len) == FAILURE)
-    {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &string, &string_len) == FAILURE) {
         RETURN_NULL();
     }
 
-    for (i = string_len; i > 0; i--)
-    {
-        if (string[i] > 47 && string[i] <58)
-        {
+    for (i = string_len; i > 0; i--) {
+        if (string[i] > 47 && string[i] <58) {
             value += pow10(flag) * ((int)string[i] - 48);
             flag++;
         } else {
-            if (value > 0)
-            {
+            if (value > 0) {
                 add_next_index_long(return_value, value);
                 value = 0;
             }
@@ -259,35 +252,28 @@ PHP_FUNCTION(peanut_multiple_array_search)
     ulong num_key;
     int (*is_equal_func)(zval *, zval *, zval * TSRMLS_DC) = is_equal_function;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "za|b", &needle, &haystack, &strict) == FAILURE)
-    {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "za|b", &needle, &haystack, &strict) == FAILURE) {
         RETURN_NULL();
     }
 
     //是否完全匹配
-    if (strict)
-    {
+    if (strict) {
         is_equal_func = is_identical_function;
     }
 
     arr_hash = Z_ARRVAL_P(haystack);
     zend_hash_internal_pointer_reset_ex(arr_hash, &pointer);
 
-    while (zend_hash_get_current_data_ex(arr_hash, (void**)&data, &pointer) == SUCCESS)
-    {
+    while (zend_hash_get_current_data_ex(arr_hash, (void**)&data, &pointer) == SUCCESS) {
         zval_add_ref(data);
-        if (Z_TYPE_PP(data) == IS_ARRAY)
-        {
+        if (Z_TYPE_PP(data) == IS_ARRAY) {
             entry_hash = Z_ARRVAL_P(*data);
             zend_hash_internal_pointer_reset_ex(entry_hash, &entry_pointer);
-            while (zend_hash_get_current_data_ex(entry_hash, (void**)&temp, &entry_pointer) == SUCCESS)
-            {
+            while (zend_hash_get_current_data_ex(entry_hash, (void**)&temp, &entry_pointer) == SUCCESS) {
                 zval_add_ref(temp);
                 is_equal_func(&res, needle, *temp TSRMLS_CC);
-                if (Z_LVAL(res))
-                {
-                    switch (zend_hash_get_current_key_ex(entry_hash, &string_key, &string_key_len, &num_key, 0, &pointer ))
-                    {
+                if (Z_LVAL(res)) {
+                    switch (zend_hash_get_current_key_ex(entry_hash, &string_key, &string_key_len, &num_key, 0, &pointer )) {
                         case HASH_KEY_IS_LONG:
                             add_next_index_long(return_value, num_key);
                             break;
