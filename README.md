@@ -23,4 +23,9 @@
 		<td>peanut_multiple_array_search</td>
 		<td>[http://wenjun.in/?p=555]</td>
 	</tr>
+	<tr>
+		<td>TODO</td>
+		<td>peanut_***</td>
+		<td>为一个二维数组的第二维统一添加一个键值对[http://wenjun.in/?p=555]</td>
+	</tr>
 </table>
